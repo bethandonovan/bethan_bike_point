@@ -15,7 +15,7 @@ filename = f'{data_dir}/{timestamp}.json'
 
 log_dir = 'log'
 os.makedirs(log_dir, exist_ok=True)
-log_filename = f'{log_dir}/{timestamp}.log'
+log_filename = f'{log_dir}/extract_log_{timestamp}.log'
 
 l.basicConfig(
     filename = log_filename,

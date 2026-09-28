@@ -2,7 +2,8 @@
 from dotenv import load_dotenv
 import os
 import boto3
-
+import logging
+from datetime import datetime
 
 #load dotenv
 load_dotenv()
@@ -11,6 +12,20 @@ load_dotenv()
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
+
+log_dir = 'log'
+timestamp = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+log_filename = f'{log_dir}/load_log_{timestamp}.log'
+
+
+logging.basicConfig(
+    filename = log_filename,
+    format = '%(asctime)s - %(levelname)s - %(message)s',
+    level = logging.INFO
+)
+
+logger = logging.getLogger()
+logging.info('Logger Successfully Initialised')
 
 #connect to s3 client
 s3_client = boto3.client(
@@ -33,7 +48,9 @@ for file in files_to_upload:
             file
         )
         print(f'{file} has been uploaded successfully')
+        logging.info(f'{file} has been uploaded successfully')
         os.remove(file_to_upload)
     except Exception as e:
         print('An error has occured')
+        logging.warning('An error has occured')
 
