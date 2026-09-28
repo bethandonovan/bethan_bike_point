@@ -1,24 +1,39 @@
+#import packages
 from dotenv import load_dotenv
 import os
 import boto3
 
+
+#load dotenv
 load_dotenv()
 
+#define access keys
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 
+#connect to s3 client
 s3_client = boto3.client(
     's3',
     aws_access_key_id = AWS_ACCESS_KEY,
     aws_secret_access_key = AWS_SECRET_ACCESS_KEY
 )
 
-file_to_upload = 'data/2026-09-23 15-21-00.json'
-filename_s3 = '2026-09-23 15-21-00.json'
+#define variables to upload data file, using names created in extract.py
 
-s3_client.upload_file(
-    file_to_upload,
-    AWS_BUCKET_NAME,
-    filename_s3
-)
+files_to_upload = os.listdir('data')
+
+for file in files_to_upload:
+    file_to_upload = f'data/{file}'
+    try:
+    #upload the file to s3 bucket 
+        s3_client.upload_file(
+            file_to_upload,
+            AWS_BUCKET_NAME,
+            file
+        )
+        print(f'{file} has been uploaded successfully')
+        os.remove(file_to_upload)
+    except Exception as e:
+        print('An error has occured')
+
