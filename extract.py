@@ -5,6 +5,7 @@ from datetime import datetime
 import time as t
 import logging as l
 
+
 url = 'https://api.tfl.gov.uk/BikePoint/'
 data_dir = 'data' 
 os.makedirs(data_dir, exist_ok=True)
@@ -14,7 +15,7 @@ filename = f'{data_dir}/{timestamp}.json'
 
 log_dir = 'log'
 os.makedirs(log_dir, exist_ok=True)
-log_filename = f'{log_dir}/{timestamp}.json'
+log_filename = f'{log_dir}/{timestamp}.log'
 
 l.basicConfig(
     filename = log_filename,
