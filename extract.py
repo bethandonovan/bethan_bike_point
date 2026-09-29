@@ -3,8 +3,10 @@ import os as os
 import json as j
 from datetime import datetime
 import time as t
-import logging as l
+from modules.log_initialise import set_up_logging
 
+#load dotenv
+load_dotenv()
 
 url = 'https://api.tfl.gov.uk/BikePoint/'
 data_dir = 'data' 
@@ -12,19 +14,10 @@ os.makedirs(data_dir, exist_ok=True)
 timestamp = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
 filename = f'{data_dir}/{timestamp}.json'
 
-
 log_dir = 'log'
-os.makedirs(log_dir, exist_ok=True)
-log_filename = f'{log_dir}/extract_log_{timestamp}.log'
 
-l.basicConfig(
-    filename = log_filename,
-    format = '%(asctime)s - %(levelname)s - %(message)s',
-    level = l.INFO
-)
-
-logger = l.getLogger()
-l.info('Logger Successfully Initialised')
+logger = set_up_logging(log_dir, timestamp)
+logger.info('Logger Successfully Initialised')
 
 max_retry = 5
 attempt = 0
@@ -42,21 +35,21 @@ while attempt < max_retry:
                 with open(filename, 'w') as file: 
                     j.dump(data, file)
                 print(f'File {filename} was successfully saved')
-                l.info(f'File {filename} was successfully saved')
+                logging.info(f'File {filename} was successfully saved')
             except Exception as e:
                 print(f'An error has occured {e}')
-                l.warning(f'An error has occured {e}')
+                logging.warning(f'An error has occured {e}')
             break 
         else: 
             print('No Data Returned')
-            l.warning('No Data Returned')
+            logging.warning('No Data Returned')
             break    
     elif  status <200 or status >=500:
         t.sleep(delay)
         attempt += 1
         print(f'Status code: {status}. Retrying. Attempt Number {attempt}')
-        l.info(f'Status code: {status}. Retrying. Attempt Number {attempt}')
+        logging.info(f'Status code: {status}. Retrying. Attempt Number {attempt}')
 
     else:
         print(f'Error. Status code {status}. Fix it')
-        l.critical(f'Error. Status code {status}. Fix it')
+        logging.critical(f'Error. Status code {status}. Fix it')
