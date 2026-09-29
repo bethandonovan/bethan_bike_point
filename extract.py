@@ -3,9 +3,10 @@ import os as os
 import json as j
 from datetime import datetime
 import time as t
-import logging
 from modules.log_initialise import set_up_logging
 
+#load dotenv
+load_dotenv()
 
 url = 'https://api.tfl.gov.uk/BikePoint/'
 data_dir = 'data' 
@@ -17,7 +18,6 @@ log_dir = 'log'
 
 logger = set_up_logging(log_dir, timestamp)
 logger.info('Logger Successfully Initialised')
-
 
 max_retry = 5
 attempt = 0
