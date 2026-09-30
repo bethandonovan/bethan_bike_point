@@ -2,8 +2,10 @@ import requests as r
 import os as os
 import json as j
 from datetime import datetime
-import time as t
+import time
 from modules.log_initialise import set_up_logging
+import logging
+from dotenv import load_dotenv
 
 #load dotenv
 load_dotenv()
@@ -45,7 +47,7 @@ while attempt < max_retry:
             logging.warning('No Data Returned')
             break    
     elif  status <200 or status >=500:
-        t.sleep(delay)
+        time.sleep(delay)
         attempt += 1
         print(f'Status code: {status}. Retrying. Attempt Number {attempt}')
         logging.info(f'Status code: {status}. Retrying. Attempt Number {attempt}')
