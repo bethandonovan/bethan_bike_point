@@ -48,7 +48,7 @@ def extract_json(url:str, data_dir:str, timestamp:str, max_retry:int, delay:int)
                 logging.warning('No Data Returned')
                 break    
         elif  status <200 or status >=500:
-            t.sleep(delay)
+            time.sleep(delay)
             attempt += 1
             print(f'Status code: {status}. Retrying. Attempt Number {attempt}')
             logging.info(f'Status code: {status}. Retrying. Attempt Number {attempt}')
